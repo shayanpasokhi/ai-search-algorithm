@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Header from "./components/Header/Header";
+import NavItems from "./constants/NavItems";
+import Aside from "./components/Aside/Aside";
+import Main from "./components/Main/Main";
+import SpaceState from "./components/SpaceState/SpaceState";
 
 function App() {
+  const [alg, setAlg] = useState(
+    () => NavItems.find((item) => item.isActive).id
+  );
+
+  const _NavItems = NavItems.map((item) => ({
+    ...item,
+    ...(item.id === alg ? { isActive: true } : { isActive: false }),
+  }));
+
+  const changeAlg = (id) => {
+    setAlg(id);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container-lg">
+      <Header NavItems={_NavItems} changeAlg={changeAlg} />
+      <div className="row">
+        <div className="col-sm-12 col-md-6">
+          <Aside>
+            <SpaceState alg={alg} />
+          </Aside>
+        </div>
+        <div className="col-sm-12 col-md-6">
+          <Main></Main>
+        </div>
+      </div>
     </div>
   );
 }
