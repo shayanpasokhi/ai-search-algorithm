@@ -53,7 +53,7 @@ export class Graph {
       largest = r;
     }
 
-    if (largest != i) {
+    if (largest !== i) {
       let swap = arr[i];
       arr[i] = arr[largest];
       arr[largest] = swap;
@@ -168,7 +168,7 @@ export class Graph {
             this.heapSort(open, "f");
           }
         } else if (isInClose) {
-          let oldF = close.find((n) => n.v === child).f;
+          let oldF = closed.find((n) => n.v === child).f;
 
           if (newF < oldF) {
             closed = closed.filter((n) => n.v !== child);
@@ -180,5 +180,62 @@ export class Graph {
 
       closed.unshift({ v, f });
     }
+
+    return false;
+  }
+
+  aStar(goal, start = this.vertices[0]) {
+    let adj = this.adjacent;
+
+    let open = [{ v: start, f: this.h[start] + 0 }];
+    let closed = [];
+
+    while (open.length) {
+      console.log(
+        "open: " +
+          open.map((n) => n.v + n.f).join(",") +
+          " | closed: " +
+          closed.map((n) => n.v + n.f).join(",")
+      );
+
+      let { v, f } = open.shift();
+
+      if (v === goal) {
+        return true;
+      }
+
+      for (const child in adj[v]) {
+        let isInOpen = open.some((n) => n.v === child);
+        let isInClose = closed.some((n) => n.v === child);
+        let newF = adj[v][child] + f + this.h[child] - this.h[v];
+
+        if (!isInOpen && !isInClose) {
+          open.push({ v: child, f: newF });
+          this.heapSort(open, "f");
+        } else if (isInOpen) {
+          let oldF = open.find((n) => n.v === child).f;
+
+          if (newF < oldF) {
+            open = open.map((n) => ({
+              ...n,
+              ...(n.v === child && { v: child, f: newF }),
+            }));
+            this.heapSort(open, "f");
+          }
+        } else if (isInClose) {
+          let oldF = closed.find((n) => n.v === child).f;
+
+          if (newF < oldF) {
+            closed = closed.filter((n) => n.v !== child);
+            open.push({ v: child, f: newF });
+            this.heapSort(open, "f");
+          }
+        }
+      }
+
+      closed.unshift({ v, f });
+    }
+
+    return false;
   }
 }
