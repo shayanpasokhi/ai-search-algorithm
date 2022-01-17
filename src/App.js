@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Header from "./components/Header/Header";
 import NavItems from "./constants/NavItems";
-import Aside from "./components/Aside/Aside";
-import Main from "./components/Main/Main";
-import SpaceState from "./components/SpaceState/SpaceState";
+import { Graph } from "./components/Graph/Graph";
+import Vertex from "./components/Vertex/Vertex";
 
 function App() {
+  const [graph, setGraph] = useState(new Graph());
   const [alg, setAlg] = useState(
     () => NavItems.find((item) => item.isActive).id
   );
@@ -20,16 +20,19 @@ function App() {
   };
 
   return (
-    <div className="container-lg">
+    <div className="container">
       <Header NavItems={_NavItems} changeAlg={changeAlg} />
       <div className="row">
-        <div className="col-sm-12 col-md-6">
-          <Aside>
-            <SpaceState alg={alg} />
-          </Aside>
+        <div className="col-md-12 col-xl-4">
+          <div className="my-3 rounded shadow-sm bg-white p-4">
+            <Vertex setGraph={setGraph} alg={alg} />
+          </div>
         </div>
-        <div className="col-sm-12 col-md-6">
-          <Main></Main>
+        <div className="col-md-12 col-xl-4">
+          <div className="my-3 rounded shadow-sm bg-white p-4"></div>
+        </div>
+        <div className="col-md-12 col-xl-4">
+          <div className="my-3 rounded shadow-sm bg-white p-4"></div>
         </div>
       </div>
     </div>
