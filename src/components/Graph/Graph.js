@@ -7,6 +7,8 @@ export class Graph {
   }
 
   addVertex(v, h = 0) {
+    v = v.toUpperCase();
+
     if (!this.vertices.includes(v)) {
       this.vertices.push(v);
       this.adjacent[v] = [];
@@ -15,6 +17,9 @@ export class Graph {
   }
 
   addEdge(v, w, g = 0) {
+    v = v.toUpperCase();
+    w = w.toUpperCase();
+
     if (this.vertices.includes(v)) {
       this.adjacent = {
         ...this.adjacent,
@@ -24,45 +29,17 @@ export class Graph {
     }
   }
 
-  heapSort(arr, k) {
-    let n = arr.length;
-
-    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-      this.heapify(arr, n, i, k);
-    }
-
-    for (let i = n - 1; i > 0; i--) {
-      let temp = arr[0];
-      arr[0] = arr[i];
-      arr[i] = temp;
-
-      this.heapify(arr, i, 0, k);
-    }
-  }
-
-  heapify(arr, n, i, k) {
-    let largest = i;
-    let l = 2 * i + 1;
-    let r = 2 * i + 2;
-
-    if (l < n && arr[l]?.[k] > arr[largest]?.[k]) {
-      largest = l;
-    }
-
-    if (r < n && arr[r]?.[k] > arr[largest]?.[k]) {
-      largest = r;
-    }
-
-    if (largest !== i) {
-      let swap = arr[i];
-      arr[i] = arr[largest];
-      arr[largest] = swap;
-
-      this.heapify(arr, n, largest, k);
-    }
+  minHeapSort(arr, k1, k2) {
+    arr.sort((a, b) =>
+      a[k1] === b[k1]
+        ? (a[k2] < b[k2] ? -1 : (a[k2] > b[k2] ? 1 : 0))
+        : a[k1] - b[k1]
+    );
   }
 
   bfs(goal, start = this.vertices[0]) {
+    if (!Array.isArray(goal)) goal = [goal];
+
     let adj = this.adjacent;
     let tmp = [];
 
@@ -74,7 +51,7 @@ export class Graph {
 
       let v = open.shift();
 
-      if (v === goal) {
+      if (goal.includes(v)) {
         return true;
       }
 
@@ -97,6 +74,8 @@ export class Graph {
   }
 
   dfs(goal, start = this.vertices[0]) {
+    if (!Array.isArray(goal)) goal = [goal];
+
     let adj = this.adjacent;
 
     let open = [start];
@@ -107,7 +86,7 @@ export class Graph {
 
       let v = open.shift();
 
-      if (v === goal) {
+      if (goal.includes(v)) {
         return true;
       }
 
@@ -130,6 +109,8 @@ export class Graph {
   }
 
   ucs(goal, start = this.vertices[0]) {
+    if (!Array.isArray(goal)) goal = [goal];
+
     let adj = this.adjacent;
 
     let open = [{ v: start, f: 0 }];
@@ -138,14 +119,14 @@ export class Graph {
     while (open.length) {
       console.log(
         "open: " +
-          open.map((n) => n.v + n.f).join(",") +
+          open.map((n) => n.v + "(" + n.f + ")").join(",") +
           " | closed: " +
-          closed.map((n) => n.v + n.f).join(",")
+          closed.map((n) => n.v + "(" + n.f + ")").join(",")
       );
 
       let { v, f } = open.shift();
 
-      if (v === goal) {
+      if (goal.includes(v)) {
         return true;
       }
 
@@ -156,7 +137,7 @@ export class Graph {
 
         if (!isInOpen && !isInClose) {
           open.push({ v: child, f: newF });
-          this.heapSort(open, "f");
+          this.minHeapSort(open, "f", "v");
         } else if (isInOpen) {
           let oldF = open.find((n) => n.v === child).f;
 
@@ -165,7 +146,7 @@ export class Graph {
               ...n,
               ...(n.v === child && { v: child, f: newF }),
             }));
-            this.heapSort(open, "f");
+            this.minHeapSort(open, "f", "v");
           }
         } else if (isInClose) {
           let oldF = closed.find((n) => n.v === child).f;
@@ -173,7 +154,7 @@ export class Graph {
           if (newF < oldF) {
             closed = closed.filter((n) => n.v !== child);
             open.push({ v: child, f: newF });
-            this.heapSort(open, "f");
+            this.minHeapSort(open, "f", "v");
           }
         }
       }
@@ -185,6 +166,8 @@ export class Graph {
   }
 
   aStar(goal, start = this.vertices[0]) {
+    if (!Array.isArray(goal)) goal = [goal];
+
     let adj = this.adjacent;
 
     let open = [{ v: start, f: this.h[start] + 0 }];
@@ -193,14 +176,14 @@ export class Graph {
     while (open.length) {
       console.log(
         "open: " +
-          open.map((n) => n.v + n.f).join(",") +
+          open.map((n) => n.v + "(" + n.f + ")").join(",") +
           " | closed: " +
-          closed.map((n) => n.v + n.f).join(",")
+          closed.map((n) => n.v + "(" + n.f + ")").join(",")
       );
 
       let { v, f } = open.shift();
 
-      if (v === goal) {
+      if (goal.includes(v)) {
         return true;
       }
 
@@ -211,7 +194,7 @@ export class Graph {
 
         if (!isInOpen && !isInClose) {
           open.push({ v: child, f: newF });
-          this.heapSort(open, "f");
+          this.minHeapSort(open, "f", "v");
         } else if (isInOpen) {
           let oldF = open.find((n) => n.v === child).f;
 
@@ -220,7 +203,7 @@ export class Graph {
               ...n,
               ...(n.v === child && { v: child, f: newF }),
             }));
-            this.heapSort(open, "f");
+            this.minHeapSort(open, "f", "v");
           }
         } else if (isInClose) {
           let oldF = closed.find((n) => n.v === child).f;
@@ -228,7 +211,7 @@ export class Graph {
           if (newF < oldF) {
             closed = closed.filter((n) => n.v !== child);
             open.push({ v: child, f: newF });
-            this.heapSort(open, "f");
+            this.minHeapSort(open, "f", "v");
           }
         }
       }
