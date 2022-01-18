@@ -12,7 +12,7 @@ const Vertex = ({ alg }) => {
   const defaultValues = {
     vertex: [{ vertex: "A", h: "" }],
   };
-  const { handleSubmit, control, getValues } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues,
   });
   const { fields, append, remove } = useFieldArray({
@@ -20,7 +20,7 @@ const Vertex = ({ alg }) => {
     control,
   });
 
-  useWatch({ name: "vertex", control });
+  const watchVertex = useWatch({ name: "vertex", control });
 
   const onSubmit = (data) => {
     console.log(data);
@@ -28,7 +28,7 @@ const Vertex = ({ alg }) => {
 
   const validAlphabet = (current = null) =>
     alphabet.filter((c) => {
-      let active = getValues("vertex").map((i) => i.vertex);
+      let active = watchVertex.map((i) => i.vertex);
 
       if (current) active = active.filter((i) => i !== current);
 
@@ -65,7 +65,8 @@ const Vertex = ({ alg }) => {
                         type="number"
                         {...field}
                         className="form-control"
-                        placeholder="h*(n)"
+                        placeholder="h(n)"
+                        min="0"
                       />
                     )}
                     name={`vertex.${index}.h`}
