@@ -28,12 +28,20 @@ function App() {
             <Vertex setGraph={setGraph} alg={alg} />
           </div>
         </div>
-        <div className="col-md-12 col-xl-4">
-          <div className="my-3 rounded shadow-sm bg-white p-4"></div>
-        </div>
-        <div className="col-md-12 col-xl-4">
-          <div className="my-3 rounded shadow-sm bg-white p-4"></div>
-        </div>
+        {graph.vertices.length ? (
+          <div className="col-md-12 col-xl-4">
+            <div className="my-3 rounded shadow-sm bg-white p-4"></div>
+          </div>
+        ) : (
+          ""
+        )}
+        {graph.res.open.length ? (
+          <div className="col-md-12 col-xl-4">
+            <div className="my-3 rounded shadow-sm bg-white p-4"></div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

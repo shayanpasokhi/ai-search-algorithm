@@ -4,6 +4,7 @@ export class Graph {
     this.adjacent = {};
     this.h = {};
     this.edges = 0;
+    this.res = { open: [], closed: [] };
   }
 
   addVertex(v, h = 0) {
@@ -32,13 +33,18 @@ export class Graph {
   minHeapSort(arr, k1, k2) {
     arr.sort((a, b) =>
       a[k1] === b[k1]
-        ? (a[k2] < b[k2] ? -1 : (a[k2] > b[k2] ? 1 : 0))
+        ? a[k2] < b[k2]
+          ? -1
+          : a[k2] > b[k2]
+          ? 1
+          : 0
         : a[k1] - b[k1]
     );
   }
 
   bfs(goal, start = this.vertices[0]) {
     if (!Array.isArray(goal)) goal = [goal];
+    goal = goal.map((g) => g.toUpperCase());
 
     let adj = this.adjacent;
     let tmp = [];
@@ -75,6 +81,7 @@ export class Graph {
 
   dfs(goal, start = this.vertices[0]) {
     if (!Array.isArray(goal)) goal = [goal];
+    goal = goal.map((g) => g.toUpperCase());
 
     let adj = this.adjacent;
 
@@ -110,6 +117,7 @@ export class Graph {
 
   ucs(goal, start = this.vertices[0]) {
     if (!Array.isArray(goal)) goal = [goal];
+    goal = goal.map((g) => g.toUpperCase());
 
     let adj = this.adjacent;
 
@@ -167,6 +175,7 @@ export class Graph {
 
   aStar(goal, start = this.vertices[0]) {
     if (!Array.isArray(goal)) goal = [goal];
+    goal = goal.map((g) => g.toUpperCase());
 
     let adj = this.adjacent;
 

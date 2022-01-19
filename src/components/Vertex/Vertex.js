@@ -1,29 +1,46 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { Graph } from "../Graph/Graph";
 import NavItems from "../../constants/NavItems";
+import { ErrorMessage } from "@hookform/error-message";
 import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
 
-const Vertex = ({ alg }) => {
+const Vertex = ({ alg, setGraph }) => {
   const [alphabet, setAlphabet] = useState(() => {
     const alpha = Array.from(Array(26)).map((e, i) => i + 65);
     return alpha.map((x) => String.fromCharCode(x));
   });
   const { h = false } = NavItems.find((item) => item.id === alg);
   const defaultValues = {
-    vertex: [{ vertex: "A", h: "" }],
+    vertex: [{ vertex: "A", h: 0 }],
   };
-  const { handleSubmit, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
     defaultValues,
+    mode: "all",
   });
   const { fields, append, remove } = useFieldArray({
     name: "vertex",
     control,
   });
 
+  const MIN_H = 0;
+  const MAX_H = 100;
+
   const watchVertex = useWatch({ name: "vertex", control });
 
   const onSubmit = (data) => {
-    console.log(data);
+    const g = new Graph();
+
+    for (const v of data.vertex) {
+      g.addVertex(v.vertex);
+    }
+
+    setGraph({ ...g });
   };
 
   const validAlphabet = (current = null) =>
@@ -45,7 +62,13 @@ const Vertex = ({ alg }) => {
               <div className={`col-${h ? 4 : 6}`}>
                 <Controller
                   render={({ field }) => (
-                    <select className="form-select" {...field}>
+                    <select
+                      aria-describedby={`vertex.${index}.vertex`}
+                      className={`form-select${
+                        errors?.vertex?.[index]?.vertex ? " is-invalid" : ""
+                      }`}
+                      {...field}
+                    >
                       {validAlphabet(field.value).map((c) => (
                         <option key={c} value={c}>
                           {c}
@@ -55,22 +78,67 @@ const Vertex = ({ alg }) => {
                   )}
                   name={`vertex.${index}.vertex`}
                   control={control}
+                  rules={{
+                    required: "نام راس را وارد نمایید",
+                    maxLength: {
+                      value: 1,
+                      message: "نام راس باید یک کاراکتر باشد",
+                    },
+                    pattern: {
+                      value: /^[A-Z]$/,
+                      message: "نام راس باید یک حرف لاتین بزرگ باشد",
+                    },
+                  }}
+                />
+                <ErrorMessage
+                  errors={errors}
+                  name={`vertex.${index}.vertex`}
+                  render={({ message }) => (
+                    <small
+                      className="invalid-feedback"
+                      id={`vertex.${index}.vertex`}
+                    >
+                      - {message}
+                    </small>
+                  )}
                 />
               </div>
               {h && (
                 <div className="col-4">
-                  <Controller
-                    render={({ field }) => (
-                      <input
-                        type="number"
-                        {...field}
-                        className="form-control"
-                        placeholder="h(n)"
-                        min="0"
-                      />
-                    )}
+                  <input
+                    type="number"
+                    aria-describedby={`vertex.${index}.h`}
+                    placeholder="h(n)"
+                    className={`form-control${
+                      errors?.vertex?.[index]?.h ? " is-invalid" : ""
+                    }`}
+                    {...register(`vertex.${index}.h`, {
+                      valueAsNumber: true,
+                      min: {
+                        value: MIN_H,
+                        message: `حداقل باید ${MIN_H} باشد`,
+                      },
+                      max: {
+                        value: MAX_H,
+                        message: `حداکثر باید ${MAX_H} باشد`,
+                      },
+                      pattern: {
+                        value: /\d+/,
+                        message: "یک عدد وارد کنید",
+                      },
+                    })}
+                  />
+                  <ErrorMessage
+                    errors={errors}
                     name={`vertex.${index}.h`}
-                    control={control}
+                    render={({ message }) => (
+                      <small
+                        className="invalid-feedback"
+                        id={`vertex.${index}.h`}
+                      >
+                        - {message}
+                      </small>
+                    )}
                   />
                 </div>
               )}
@@ -114,6 +182,7 @@ const Vertex = ({ alg }) => {
 
 Vertex.propTypes = {
   alg: PropTypes.oneOf(NavItems.map((item) => item.id)).isRequired,
+  setGraph: PropTypes.func.isRequired,
 };
 
 export default Vertex;
