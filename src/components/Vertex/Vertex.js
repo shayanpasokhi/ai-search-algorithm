@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Graph } from "../Graph/Graph";
 import NavItems from "../../constants/NavItems";
 import { ErrorMessage } from "@hookform/error-message";
 import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
 
-const Vertex = ({ alg, setGraph }) => {
+const Vertex = ({ alg, setGraph, vertexRules, costRules }) => {
   const [alphabet, setAlphabet] = useState(() => {
     const alpha = Array.from(Array(26)).map((e, i) => i + 65);
     return alpha.map((x) => String.fromCharCode(x));
@@ -28,19 +27,21 @@ const Vertex = ({ alg, setGraph }) => {
     control,
   });
 
-  const MIN_H = 0;
-  const MAX_H = 100;
-
   const watchVertex = useWatch({ name: "vertex", control });
 
   const onSubmit = (data) => {
-    const g = new Graph();
+    const vertex = [];
 
     for (const v of data.vertex) {
-      g.addVertex(v.vertex);
+      vertex.push({ v: v.vertex, h: h ? v.h : 0 });
     }
 
-    setGraph({ ...g });
+    setGraph({
+      vertex,
+      edge: [],
+      ig: { ini: "", goal: [] },
+      res: { open: [], closed: [] },
+    });
   };
 
   const validAlphabet = (current = null) =>
@@ -78,17 +79,7 @@ const Vertex = ({ alg, setGraph }) => {
                   )}
                   name={`vertex.${index}.vertex`}
                   control={control}
-                  rules={{
-                    required: "نام راس را وارد نمایید",
-                    maxLength: {
-                      value: 1,
-                      message: "نام راس باید یک کاراکتر باشد",
-                    },
-                    pattern: {
-                      value: /^[A-Z]$/,
-                      message: "نام راس باید یک حرف لاتین بزرگ باشد",
-                    },
-                  }}
+                  rules={vertexRules}
                 />
                 <ErrorMessage
                   errors={errors}
@@ -112,21 +103,7 @@ const Vertex = ({ alg, setGraph }) => {
                     className={`form-control${
                       errors?.vertex?.[index]?.h ? " is-invalid" : ""
                     }`}
-                    {...register(`vertex.${index}.h`, {
-                      valueAsNumber: true,
-                      min: {
-                        value: MIN_H,
-                        message: `حداقل باید ${MIN_H} باشد`,
-                      },
-                      max: {
-                        value: MAX_H,
-                        message: `حداکثر باید ${MAX_H} باشد`,
-                      },
-                      pattern: {
-                        value: /\d+/,
-                        message: "یک عدد وارد کنید",
-                      },
-                    })}
+                    {...register(`vertex.${index}.h`, costRules)}
                   />
                   <ErrorMessage
                     errors={errors}
@@ -164,7 +141,7 @@ const Vertex = ({ alg, setGraph }) => {
                 if (c)
                   append({
                     ...defaultValues["vertex"][0],
-                    vertex: validAlphabet()[0],
+                    vertex: c,
                   });
               }}
             >
@@ -183,6 +160,8 @@ const Vertex = ({ alg, setGraph }) => {
 Vertex.propTypes = {
   alg: PropTypes.oneOf(NavItems.map((item) => item.id)).isRequired,
   setGraph: PropTypes.func.isRequired,
+  vertexRules: PropTypes.object,
+  costRules: PropTypes.object,
 };
 
 export default Vertex;

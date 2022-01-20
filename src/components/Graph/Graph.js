@@ -12,7 +12,7 @@ export class Graph {
 
     if (!this.vertices.includes(v)) {
       this.vertices.push(v);
-      this.adjacent[v] = [];
+      this.adjacent[v] = {};
       this.h[v] = parseInt(h);
     }
   }
