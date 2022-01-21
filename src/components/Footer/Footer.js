@@ -20,11 +20,11 @@ const Footer = () => {
           rel="noopener noreferrer"
           className="text-decoration-none fs-6 text-dark"
         >
-          <i class="bi bi-pencil-square me-2"></i>بازخورد
+          <i className="bi bi-pencil-square me-2"></i>بازخورد
         </a>
         <div className={classes["h-line"]}></div>
         <span className="fs-6">
-          <i class="bi bi-heart-fill me-2 text-danger"></i>تقدیم به استاد عزیزم رامین رهنمون
+          <i className="bi bi-heart-fill me-2 text-danger"></i>تقدیم به استاد عزیزم رامین رهنمون
         </span>
       </div>
     </footer>
