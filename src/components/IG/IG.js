@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
 import PropTypes from "prop-types";
 import { ErrorMessage } from "@hookform/error-message";
+import { Graph } from "../Graph/Graph";
 
-const IG = ({ graph, vertexRules }) => {
+const IG = ({ alg, graph, setGraph, vertexRules }) => {
+  const { id: algId } = alg;
   const defaultValues = {
-    ini: graph.vertex[0].v,
-    ig: [{ goal: graph.vertex[graph.vertex.length - 1].v }],
+    ini: graph.vertex[0].vertex,
+    ig: [{ goal: graph.vertex[graph.vertex.length - 1].vertex }],
   };
 
   const {
@@ -14,6 +16,7 @@ const IG = ({ graph, vertexRules }) => {
     control,
     register,
     formState: { errors },
+    reset,
   } = useForm({
     mode: "all",
     defaultValues,
@@ -24,19 +27,36 @@ const IG = ({ graph, vertexRules }) => {
     control,
   });
 
+  useEffect(() => {
+    reset(defaultValues);
+  }, [graph.vertex]);
+
   const watchIg = useWatch({ name: "ig", control });
 
   const validAlphabet = (current = null) =>
-    graph.vertex.filter(({ v }) => {
+    graph.vertex.filter(({ vertex }) => {
       let active = watchIg.map((i) => i.goal);
 
       if (current) active = active.filter((i) => i !== current);
 
-      return !active.includes(v);
+      return !active.includes(vertex);
     });
 
   const onSubmit = (data) => {
-    console.log(data);
+    const _graph = new Graph();
+    const goal = data.ig.map((n) => n.goal);
+
+    for (const v of graph.vertex) {
+      _graph.addVertex(v.vertex, v.h);
+    }
+
+    for (const e of graph.edge) {
+      _graph.addEdge(e.parent, e.child, e.g);
+    }
+
+    const res = _graph[algId](goal, data.ini);
+
+    setGraph((pre) => ({ ...pre, res }));
   };
 
   return (
@@ -50,9 +70,9 @@ const IG = ({ graph, vertexRules }) => {
               className={`form-select${errors?.ini ? " is-invalid" : ""}`}
               {...register("ini", vertexRules)}
             >
-              {graph.vertex.map(({ v }) => (
-                <option key={v} value={v}>
-                  {v}
+              {graph.vertex.map(({ vertex }) => (
+                <option key={vertex} value={vertex}>
+                  {vertex}
                 </option>
               ))}
             </select>
@@ -81,9 +101,9 @@ const IG = ({ graph, vertexRules }) => {
                       }`}
                       {...field}
                     >
-                      {validAlphabet(field.value).map(({ v }) => (
-                        <option key={v} value={v}>
-                          {v}
+                      {validAlphabet(field.value).map(({ vertex }) => (
+                        <option key={vertex} value={vertex}>
+                          {vertex}
                         </option>
                       ))}
                     </select>
@@ -120,7 +140,7 @@ const IG = ({ graph, vertexRules }) => {
               type="button"
               className="btn btn-outline-primary w-100"
               onClick={() => {
-                const c = validAlphabet()[0]?.v;
+                const c = validAlphabet()[0]?.vertex;
                 if (c)
                   append({
                     ...defaultValues["ig"][0],
@@ -141,7 +161,14 @@ const IG = ({ graph, vertexRules }) => {
 };
 
 IG.propTypes = {
-  graph: PropTypes.object.isRequired,
+  alg: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  graph: PropTypes.shape({
+    vertex: PropTypes.array.isRequired,
+    edge: PropTypes.array.isRequired,
+  }).isRequired,
+  setGraph: PropTypes.func.isRequired,
   vertexRules: PropTypes.object,
 };
 

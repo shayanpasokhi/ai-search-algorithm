@@ -1,0 +1,6 @@
+.h-line {
+  margin: 0px 1rem;
+  width: 1px;
+  height: 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+}

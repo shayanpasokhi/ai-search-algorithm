@@ -21,7 +21,7 @@ const NavItems = [
     h: false,
   },
   {
-    id: "astar",
+    id: "aStar",
     title: "جستجو ای استار",
     isActive: false,
     g: true,

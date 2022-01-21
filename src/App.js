@@ -1,28 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./components/Header/Header";
 import NavItems from "./constants/NavItems";
 import Vertex from "./components/Vertex/Vertex";
 import Edge from "./components/Edge/Edge";
 import IG from "./components/IG/IG";
+import Result from "./components/Result/Result";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [graph, setGraph] = useState({
     vertex: [],
     edge: [],
-    ig: { ini: "", goal: [] },
-    res: { open: [], closed: [] },
+    res: { open: [], closed: [], alg: "" },
   });
-  const [alg, setAlg] = useState(
-    () => NavItems.find((item) => item.isActive).id
-  );
+  const [alg, setAlg] = useState(() => NavItems.find((item) => item.isActive));
+
+  useEffect(() => {
+    let elmnt = document.getElementById("resTable");
+    if (elmnt) elmnt.scrollIntoView({ behavior: "smooth", inline: "center" });
+  }, [graph.res]);
 
   const _NavItems = NavItems.map((item) => ({
     ...item,
-    ...(item.id === alg ? { isActive: true } : { isActive: false }),
+    ...(item.id === alg.id ? { isActive: true } : { isActive: false }),
   }));
 
   const changeAlg = (id) => {
-    setAlg(id);
+    setAlg(() => NavItems.find((item) => item.id === id));
   };
 
   const MIN_COST = 0;
@@ -57,45 +61,70 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <>
       <Header NavItems={_NavItems} changeAlg={changeAlg} />
-      <div className="row">
-        <div className="col-md-12 col-xl-4">
-          <div className="my-3 rounded shadow-sm bg-white p-4">
-            <Vertex
-              setGraph={setGraph}
-              alg={alg}
-              vertexRules={vertexRules}
-              costRules={costRules}
-            />
+      <main className="flex-shrink-0">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12 col-xl-4">
+              <div className="my-3 rounded shadow-sm bg-white p-4">
+                <Vertex
+                  setGraph={setGraph}
+                  alg={alg}
+                  vertexRules={vertexRules}
+                  costRules={costRules}
+                />
+              </div>
+            </div>
+            {graph.vertex.length > 1 ? (
+              <div className="col-md-12 col-xl-4">
+                <div className="my-3 rounded shadow-sm bg-white p-4">
+                  <Edge
+                    setGraph={setGraph}
+                    graph={graph}
+                    alg={alg}
+                    vertexRules={vertexRules}
+                    costRules={costRules}
+                  />
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+            {graph.edge.length || graph.vertex.length === 1 ? (
+              <div className="col-md-12 col-xl-4">
+                <div className="my-3 rounded shadow-sm bg-white p-4">
+                  <IG
+                    alg={alg}
+                    graph={graph}
+                    setGraph={setGraph}
+                    vertexRules={vertexRules}
+                  />
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
+          {graph.res.open.length ? (
+            <div className="row">
+              <div className="col">
+                <div
+                  className="table-responsive my-3 rounded shadow-sm bg-white p-4"
+                  id="resTable"
+                  dir="ltr"
+                >
+                  <Result res={graph.res} />
+                </div>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
-        {graph.vertex.length > 1 ? (
-          <div className="col-md-12 col-xl-4">
-            <div className="my-3 rounded shadow-sm bg-white p-4">
-              <Edge
-                setGraph={setGraph}
-                graph={graph}
-                alg={alg}
-                vertexRules={vertexRules}
-                costRules={costRules}
-              />
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
-        {graph.edge.length || graph.vertex.length === 1 ? (
-          <div className="col-md-12 col-xl-4">
-            <div className="my-3 rounded shadow-sm bg-white p-4">
-              <IG graph={graph} vertexRules={vertexRules} />
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-    </div>
+      </main>
+      <Footer />
+    </>
   );
 }
 

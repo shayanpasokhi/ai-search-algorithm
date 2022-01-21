@@ -4,7 +4,6 @@ export class Graph {
     this.adjacent = {};
     this.h = {};
     this.edges = 0;
-    this.res = { open: [], closed: [] };
   }
 
   addVertex(v, h = 0) {
@@ -43,6 +42,7 @@ export class Graph {
   }
 
   bfs(goal, start = this.vertices[0]) {
+    let res = { open: [], closed: [], alg: "BFS" };
     if (!Array.isArray(goal)) goal = [goal];
     goal = goal.map((g) => g.toUpperCase());
 
@@ -53,12 +53,13 @@ export class Graph {
     let closed = [];
 
     while (open.length) {
-      console.log("open: " + open.join(",") + " | closed: " + closed.join(","));
+      res.open.push(open.map((c) => ({ vertex: c, f: null })));
+      res.closed.push(closed.map((c) => ({ vertex: c, f: null })));
 
       let v = open.shift();
 
       if (goal.includes(v)) {
-        return true;
+        return res;
       }
 
       closed.unshift(v);
@@ -76,10 +77,11 @@ export class Graph {
       }
     }
 
-    return false;
+    return res;
   }
 
   dfs(goal, start = this.vertices[0]) {
+    let res = { open: [], closed: [], alg: "DFS" };
     if (!Array.isArray(goal)) goal = [goal];
     goal = goal.map((g) => g.toUpperCase());
 
@@ -89,12 +91,13 @@ export class Graph {
     let closed = [];
 
     while (open.length) {
-      console.log("open: " + open.join(",") + " | closed: " + closed.join(","));
+      res.open.push(open.map((c) => ({ vertex: c, f: null })));
+      res.closed.push(closed.map((c) => ({ vertex: c, f: null })));
 
       let v = open.shift();
 
       if (goal.includes(v)) {
-        return true;
+        return res;
       }
 
       closed.unshift(v);
@@ -112,10 +115,11 @@ export class Graph {
       }
     }
 
-    return false;
+    return res;
   }
 
   ucs(goal, start = this.vertices[0]) {
+    let res = { open: [], closed: [], alg: "Uniform-cost search" };
     if (!Array.isArray(goal)) goal = [goal];
     goal = goal.map((g) => g.toUpperCase());
 
@@ -125,17 +129,13 @@ export class Graph {
     let closed = [];
 
     while (open.length) {
-      console.log(
-        "open: " +
-          open.map((n) => n.v + "(" + n.f + ")").join(",") +
-          " | closed: " +
-          closed.map((n) => n.v + "(" + n.f + ")").join(",")
-      );
+      res.open.push(open.map((c) => ({ vertex: c.v, f: c.f })));
+      res.closed.push(closed.map((c) => ({ vertex: c.v, f: c.f })));
 
       let { v, f } = open.shift();
 
       if (goal.includes(v)) {
-        return true;
+        return res;
       }
 
       for (const child in adj[v]) {
@@ -170,10 +170,11 @@ export class Graph {
       closed.unshift({ v, f });
     }
 
-    return false;
+    return res;
   }
 
   aStar(goal, start = this.vertices[0]) {
+    let res = { open: [], closed: [], alg: "A*" };
     if (!Array.isArray(goal)) goal = [goal];
     goal = goal.map((g) => g.toUpperCase());
 
@@ -183,17 +184,13 @@ export class Graph {
     let closed = [];
 
     while (open.length) {
-      console.log(
-        "open: " +
-          open.map((n) => n.v + "(" + n.f + ")").join(",") +
-          " | closed: " +
-          closed.map((n) => n.v + "(" + n.f + ")").join(",")
-      );
+      res.open.push(open.map((c) => ({ vertex: c.v, f: c.f })));
+      res.closed.push(closed.map((c) => ({ vertex: c.v, f: c.f })));
 
       let { v, f } = open.shift();
 
       if (goal.includes(v)) {
-        return true;
+        return res;
       }
 
       for (const child in adj[v]) {
@@ -228,6 +225,6 @@ export class Graph {
       closed.unshift({ v, f });
     }
 
-    return false;
+    return res;
   }
 }

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import NavItems from "../../constants/NavItems";
 import { ErrorMessage } from "@hookform/error-message";
 import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
 
@@ -9,9 +8,9 @@ const Vertex = ({ alg, setGraph, vertexRules, costRules }) => {
     const alpha = Array.from(Array(26)).map((e, i) => i + 65);
     return alpha.map((x) => String.fromCharCode(x));
   });
-  const { h = false } = NavItems.find((item) => item.id === alg);
+  const { h = false } = alg;
   const defaultValues = {
-    vertex: [{ vertex: "A", h: 0 }],
+    vertex: [{ vertex: alphabet[0], h: 0 }],
   };
   const {
     register,
@@ -33,7 +32,7 @@ const Vertex = ({ alg, setGraph, vertexRules, costRules }) => {
     const vertex = [];
 
     for (const v of data.vertex) {
-      vertex.push({ v: v.vertex, h: h ? v.h : 0 });
+      vertex.push({ vertex: v.vertex, h: h ? v.h : 0 });
     }
 
     setGraph({
@@ -158,7 +157,9 @@ const Vertex = ({ alg, setGraph, vertexRules, costRules }) => {
 };
 
 Vertex.propTypes = {
-  alg: PropTypes.oneOf(NavItems.map((item) => item.id)).isRequired,
+  alg: PropTypes.shape({
+    h: PropTypes.bool.isRequired,
+  }).isRequired,
   setGraph: PropTypes.func.isRequired,
   vertexRules: PropTypes.object,
   costRules: PropTypes.object,

@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import NavItems from "../../constants/NavItems";
 import { ErrorMessage } from "@hookform/error-message";
 import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
 
 const Edge = ({ alg, setGraph, graph, vertexRules, costRules }) => {
-  const { g = false } = NavItems.find((item) => item.id === alg);
+  const { g = false } = alg;
   const defaultValues = {
-    edge: [{ parent: graph.vertex[0].v, child: graph.vertex[1].v, g: 0 }],
+    edge: [
+      { parent: graph.vertex[0].vertex, child: graph.vertex[1].vertex, g: 0 },
+    ],
   };
   const {
     handleSubmit,
@@ -28,7 +29,7 @@ const Edge = ({ alg, setGraph, graph, vertexRules, costRules }) => {
   const watchEdge = useWatch({ name: "edge", control });
 
   const validChildren = (parent) =>
-    graph.vertex.filter(({ v }) => v !== parent);
+    graph.vertex.filter(({ vertex }) => vertex !== parent);
 
   useEffect(() => {
     reset(defaultValues);
@@ -40,7 +41,7 @@ const Edge = ({ alg, setGraph, graph, vertexRules, costRules }) => {
       let child = watchEdge[index].child;
 
       if (parent === child) {
-        setValue(`edge.${index}.child`, validChildren(parent)[0].v);
+        setValue(`edge.${index}.child`, validChildren(parent)[0].vertex);
       }
     }
   });
@@ -77,9 +78,9 @@ const Edge = ({ alg, setGraph, graph, vertexRules, costRules }) => {
                         }`}
                         {...field}
                       >
-                        {graph.vertex.map(({ v }) => (
-                          <option key={v} value={v}>
-                            {v}
+                        {graph.vertex.map(({ vertex }) => (
+                          <option key={vertex} value={vertex}>
+                            {vertex}
                           </option>
                         ))}
                       </select>
@@ -113,9 +114,9 @@ const Edge = ({ alg, setGraph, graph, vertexRules, costRules }) => {
                         }`}
                         {...field}
                       >
-                        {validChildren(parent).map(({ v }) => (
-                          <option key={v} value={v}>
-                            {v}
+                        {validChildren(parent).map(({ vertex }) => (
+                          <option key={vertex} value={vertex}>
+                            {vertex}
                           </option>
                         ))}
                       </select>
@@ -199,9 +200,13 @@ const Edge = ({ alg, setGraph, graph, vertexRules, costRules }) => {
 };
 
 Edge.propTypes = {
-  alg: PropTypes.oneOf(NavItems.map((item) => item.id)).isRequired,
+  alg: PropTypes.shape({
+    h: PropTypes.bool.isRequired,
+  }).isRequired,
   setGraph: PropTypes.func.isRequired,
-  graph: PropTypes.object.isRequired,
+  graph: PropTypes.shape({
+    vertex: PropTypes.array.isRequired,
+  }).isRequired,
   vertexRules: PropTypes.object,
   costRules: PropTypes.object,
 };

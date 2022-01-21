@@ -9,7 +9,7 @@ const Nav = ({ items, onClick }) => {
   };
 
   return (
-    <nav className="justify-content-center">
+    <nav className="justify-content-center my-4 rounded shadow-sm bg-white">
       <ul className="nav nav-pills nav-justified">
         {items.map((item) => (
           <li className="nav-item" key={item.id}>
@@ -30,14 +30,14 @@ const Nav = ({ items, onClick }) => {
 };
 
 Nav.propTypes = {
-  NavItems: PropTypes.arrayOf(
-    PropTypes.exact({
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       isActive: PropTypes.bool.isRequired,
     })
-  ),
-  changeAlg: PropTypes.func,
+  ).isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Nav;
