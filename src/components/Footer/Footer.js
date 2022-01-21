@@ -24,7 +24,7 @@ const Footer = () => {
         </a>
         <div className={classes["h-line"]}></div>
         <span className="fs-6">
-          <i class="bi bi-heart-fill me-2 text-danger"></i>رامین رهنمون
+          <i class="bi bi-heart-fill me-2 text-danger"></i>تقدیم به استاد عزیزم رامین رهنمون
         </span>
       </div>
     </footer>
