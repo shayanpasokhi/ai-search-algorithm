@@ -22,10 +22,10 @@ const Footer = () => {
         >
           <i className="bi bi-pencil-square me-2"></i>بازخورد
         </a>
-        <div className={classes["h-line"]}></div>
+        {/* <div className={classes["h-line"]}></div>
         <span className="fs-6">
           <i className="bi bi-heart-fill me-2 text-danger"></i>تقدیم به استاد عزیزم رامین رهنمون
-        </span>
+        </span> */}
       </div>
     </footer>
   );
