@@ -1,0 +1,39 @@
+{
+  "files": {
+    "main.css": "/ai-search-algorithm/static/css/main.591bd63d.css",
+    "main.js": "/ai-search-algorithm/static/js/main.70365201.js",
+    "static/media/bootstrap-icons.woff?": "/ai-search-algorithm/static/media/bootstrap-icons.38c4d2499557ae0379fd.woff",
+    "static/media/Vazir-Light.eot": "/ai-search-algorithm/static/media/Vazir-Light.dd27df7f828b4a65cede.eot",
+    "static/media/Vazir-Light.ttf": "/ai-search-algorithm/static/media/Vazir-Light.cbb41bbc80aabe4a8be5.ttf",
+    "static/media/Vazir-Bold.eot": "/ai-search-algorithm/static/media/Vazir-Bold.ce0efe6cea93b773470c.eot",
+    "static/media/Vazir-Black.eot": "/ai-search-algorithm/static/media/Vazir-Black.f7e509df705527e74213.eot",
+    "static/media/Vazir-Bold.ttf": "/ai-search-algorithm/static/media/Vazir-Bold.6ca8f81989073f9a7f7b.ttf",
+    "static/media/Vazir-Black.ttf": "/ai-search-algorithm/static/media/Vazir-Black.88dbe0e03df0e3071026.ttf",
+    "static/media/Vazir-Medium.eot": "/ai-search-algorithm/static/media/Vazir-Medium.195c7fc26cfc4a62209c.eot",
+    "static/media/Vazir-Medium.ttf": "/ai-search-algorithm/static/media/Vazir-Medium.816a5ec7d7c58db86219.ttf",
+    "static/media/Vazir-Thin.eot": "/ai-search-algorithm/static/media/Vazir-Thin.3a5db120e4b9dce37b1b.eot",
+    "static/media/Vazir-Thin.ttf": "/ai-search-algorithm/static/media/Vazir-Thin.7bcf286deff6dd707224.ttf",
+    "static/media/Vazir-Regular.eot": "/ai-search-algorithm/static/media/Vazir-Regular.6ac404eb3f53dd9ce67f.eot",
+    "static/media/Vazir-Regular.ttf": "/ai-search-algorithm/static/media/Vazir-Regular.a24d67ce7f999b3cef04.ttf",
+    "static/media/bootstrap-icons.woff2?": "/ai-search-algorithm/static/media/bootstrap-icons.2b56e79ae5013246de29.woff2",
+    "static/media/Vazir-Light.woff": "/ai-search-algorithm/static/media/Vazir-Light.caa9f23dbd02e18916b0.woff",
+    "static/media/Vazir-Bold.woff": "/ai-search-algorithm/static/media/Vazir-Bold.7344d486ecbb56a9b3e5.woff",
+    "static/media/Vazir-Black.woff": "/ai-search-algorithm/static/media/Vazir-Black.ebc09d026eccef0942dd.woff",
+    "static/media/Vazir-Medium.woff": "/ai-search-algorithm/static/media/Vazir-Medium.d4368692b6af4ab42f19.woff",
+    "static/media/Vazir-Thin.woff": "/ai-search-algorithm/static/media/Vazir-Thin.84664efe6fd832ea3096.woff",
+    "static/media/Vazir-Regular.woff": "/ai-search-algorithm/static/media/Vazir-Regular.806537dbf5ba4d9ab402.woff",
+    "static/media/Vazir-Light.woff2": "/ai-search-algorithm/static/media/Vazir-Light.acb6acb54afc6a9a4423.woff2",
+    "static/media/Vazir-Bold.woff2": "/ai-search-algorithm/static/media/Vazir-Bold.0135812b3d7792a1ec26.woff2",
+    "static/media/Vazir-Black.woff2": "/ai-search-algorithm/static/media/Vazir-Black.185841df3f307c121958.woff2",
+    "static/media/Vazir-Medium.woff2": "/ai-search-algorithm/static/media/Vazir-Medium.1d7bcfd971cc881a83c6.woff2",
+    "static/media/Vazir-Thin.woff2": "/ai-search-algorithm/static/media/Vazir-Thin.84fabf66ff703ce087e8.woff2",
+    "static/media/Vazir-Regular.woff2": "/ai-search-algorithm/static/media/Vazir-Regular.a360dc26407972d3cb7d.woff2",
+    "index.html": "/ai-search-algorithm/index.html",
+    "main.591bd63d.css.map": "/ai-search-algorithm/static/css/main.591bd63d.css.map",
+    "main.70365201.js.map": "/ai-search-algorithm/static/js/main.70365201.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.591bd63d.css",
+    "static/js/main.70365201.js"
+  ]
+}
